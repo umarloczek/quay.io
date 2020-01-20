@@ -16,3 +16,6 @@ jobs:
 
     - name: benchmark
       run: make bench
+
+    - name: stats
+      run: docker stats --no-stream
