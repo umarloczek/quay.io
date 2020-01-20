@@ -1,0 +1,56 @@
+version: '3.6'
+
+services:
+
+  wrk:
+    image: quay.io/dim/wrk
+    command: -c 1 -t 1 -d 20 --timeout 1s --latency http://nginx:80
+
+  mysql:
+    build:
+      context: ./mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: 'root'
+      MYSQL_DATABASE: 'root'
+
+  wordpress:
+    depends_on:
+      - mysql
+    build:
+      context: ./wordpress
+    environment:
+      WORDPRESS_DB_HOST: 'mysql'
+      WORDPRESS_DB_USER: 'root'
+      WORDPRESS_DB_PASSWORD: 'root'
+      WORDPRESS_DB_name: 'root'
+    volumes:
+      - www:/var/www/html
+
+  wp-cli:
+    depends_on:
+      - wordpress
+    build:
+      context: ./wordpress/wp-cli
+    volumes:
+      - www:/var/www/html
+    command: >
+      wait-for-it wordpress:9000 -t 30 --strict -- wp core install
+      --url=http://localhost:9333
+      --title=test
+      --admin_user=test
+      --admin_password=test
+      --admin_email=example@example.com
+      --skip-email
+
+  nginx:
+    depends_on:
+      - wordpress
+    build:
+      context: ./nginx
+    ports:
+      - 9333:80
+    volumes:
+      - www:/var/www/html
+
+volumes:
+  www:
