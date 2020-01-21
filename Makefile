@@ -59,7 +59,7 @@ wait:	## wait for wordpress to be ready
 clear: base-rm dev-rm	## remove all deployments with volumes
 
 bench:		## benchmark wordpress using wrk https://github.com/wg/wrk
-	docker run --rm -it --network=host \
+	docker run --rm --network=host \
 	quay.io/dim/wrk:stable \
 	${BENCH} ${URL}
 
