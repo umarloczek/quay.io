@@ -1,0 +1,27 @@
+name: Dev
+
+on: [push, pull_request]
+
+jobs:
+  bench:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+
+    - name: dev-up
+      run: make dev-up
+
+    - name: dev-down
+      run: make dev-down
+
+    - name: dev-rm
+      run: make dev-rm
+
+    - name: dev-restart
+      run: make dev-restart
+
+    - name: bench
+      run: make bench
+
+    - name: stats
+      run: docker stats --no-stream
