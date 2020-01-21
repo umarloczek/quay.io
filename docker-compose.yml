@@ -3,8 +3,9 @@ version: '3.6'
 services:
 
   wrk:
-    image: quay.io/dim/wrk
-    command: -c 1 -t 1 -d 20 --timeout 1s --latency http://nginx:80
+    image: quay.io/dim/wrk:stable
+    command: -c 5 -t 5 -d 10 --timeout 1s --latency http://localhost:9333/?p=1
+    network_mode: host
 
   mysql:
     build:
