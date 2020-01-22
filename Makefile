@@ -1,7 +1,10 @@
 include .env
-
+# todo add commands for deploying proxy and logs, automate this process
 BASE			=docker-compose -f docker-compose.yaml
 DEV				=docker-compose -f docker-compose.yaml -f docker-compose.dev.yaml
+PROXY			=docker-compose -f docker-compose.proxy.yaml
+DEPLOY			=docker-compose -f docker-compose.deploy.yaml
+
 UP				=up --detach --build
 
 URL				=http://localhost:${WORDPRESS_PORT}
@@ -11,6 +14,15 @@ WAIT			=docker run --rm --network=host alpine apk add curl && ${WAITCMD}
 WAITCMD			=timeout -s TERM 60 sh -c 'while [[ "$$(curl -s -o /dev/null -L -w ''%{http_code}'' ${URL})" != "200" ]]; do echo ${URL} not ready && sleep 2; done'
 VISIT			=echo "Visit ${URL}"
 
+# SET DEFAULT_EMAIL in .env file first!
+deploy:
+	docker run --rm -it -v /$$PWD:/app --volume="~/.ssh/:/root/.ssh" quay.io/dim/terraform apply
+
+remove-deploy:
+	docker run --rm -it -v /$$PWD:/app --volume="~/.ssh/:/root/.ssh" quay.io/dim/terraform destroy
+
+proxy-logs:
+	${PROXY} logs
 
 # BASE
 base-up:	## run BASE environment
