@@ -1,0 +1,42 @@
+version: '3.6'
+
+# Images below are forks of:
+#   https://github.com/jwilder/nginx-proxy
+#   https://github.com/JrCs/docker-letsencrypt-nginx-proxy-companion
+
+services:
+
+  nginx:
+    image: quay.io/bukow/nginx-proxy
+    restart: on-failure
+    network_mode: bridge
+    labels:
+      - com.github.jrcs.letsencrypt_nginx_proxy_companion.nginx_proxy=
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - certs:/etc/nginx/certs
+      - vhost:/etc/nginx/vhost.d
+      - html:/usr/share/nginx/html
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+
+  nginx-letencrypt:
+
+    image: quay.io/bukow/nginx-proxy-letsencrypt
+    restart: on-failure
+    network_mode: none
+    depends_on:
+      - nginx
+    volumes:
+      - certs:/etc/nginx/certs
+      - vhost:/etc/nginx/vhost.d
+      - html:/usr/share/nginx/html
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    environment:
+      DEFAULT_EMAIL:
+
+volumes:
+  certs:
+  vhost:
+  html:
