@@ -1,7 +1,7 @@
 include .env
 
-BASE			=docker-compose -f docker-compose.yml
-DEV				=docker-compose -f docker-compose.yml -f docker-compose.dev.yaml
+BASE			=docker-compose -f docker-compose.yaml
+DEV				=docker-compose -f docker-compose.yaml -f docker-compose.dev.yaml
 UP				=up --detach --build
 
 URL				=http://localhost:${WORDPRESS_PORT}
