@@ -32,6 +32,7 @@ proxy-rm:
 	-@${PROXY} down -v
 
 target			=develop
+.PHONY: test
 test:
 	docker run --rm -it --volume=/$${PWD}:/apps --network=host\
 		alpine \
@@ -40,7 +41,7 @@ test:
 		apk update && \
 		apk add curl sudo bash && \
 		chmod +x /apps/test.sh && \
-		/apps/test.sh $(target)'
+		/apps/test_http.sh $(target)'
 
 .PHONY: help
 help:
