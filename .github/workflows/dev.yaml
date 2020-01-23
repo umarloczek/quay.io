@@ -22,13 +22,13 @@ jobs:
 
     - name: Wait for homepage 200 OK
       working-directory: ./services
-      run: timeout -s TERM 60 bash -c 'while [[ "$$(curl -s -o /dev/null -L -w ''%{http_code}''
+      run: source .env && timeout -s TERM 60 bash -c 'while [[ "$$(curl -s -o /dev/null -L -w ''%{http_code}''
            localhost:${WORDPRESS_PORT})" != "200" ]];
            do echo Waiting... && sleep 5; done'
 
     - name: Wait for static 200 OK
       working-directory: ./services
-      run: timeout -s TERM 60 bash -c 'while [[ "$$(curl -s -o /dev/null -L -w ''%{http_code}''
+      run: source .env && timeout -s TERM 60 bash -c 'while [[ "$$(curl -s -o /dev/null -L -w ''%{http_code}''
            localhost:${WORDPRESS_PORT})/wp-includes/js/jquery/jquery.js" != "200" ]];
            do echo Waiting... && sleep 5; done'
 
@@ -38,17 +38,15 @@ jobs:
 
     - name: Wait for homepage 200 OK
       working-directory: ./services
-      run: source .env && \
-          timeout -s TERM 60 bash -c 'while [[ "$$(curl -s -o /dev/null -L -w ''%{http_code}'' \
-            ${DOMAIN_NAME})" != "200" ]]; \
-            do echo Waiting... && sleep 5; done'
+      run: source .env && timeout -s TERM 60 bash -c 'while [[ "$$(curl -s -o /dev/null -L -w ''%{http_code}''
+           ${DOMAIN_NAME})" != "200" ]];
+           do echo Waiting... && sleep 5; done'
 
     - name: Wait for static 200 OK
       working-directory: ./services
-      run: source .env && \
-          timeout -s TERM 60 bash -c 'while [[ "$$(curl -s -o /dev/null -L -w ''%{http_code}'' \
-            ${DOMAIN_NAME})/wp-includes/js/jquery/jquery.js" != "200" ]]; \
-            do echo Waiting... && sleep 5; done'
+      run: source .env && timeout -s TERM 60 bash -c 'while [[ "$$(curl -s -o /dev/null -L -w ''%{http_code}''
+           ${DOMAIN_NAME})/wp-includes/js/jquery/jquery.js" != "200" ]];
+           do echo Waiting... && sleep 5; done'
 
     - name: Cleanup
       working-directory: ./services
