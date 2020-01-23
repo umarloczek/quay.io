@@ -9,18 +9,12 @@ jobs:
     steps:
     - uses: actions/checkout@v1
 
-    - name: W?
-      run: timeout
-
     - name: Load environment
       run: source .env
       working-directory: ./services
 
     - name: Modify /etc/hosts
       run: echo "127.0.0.1 $DOMAIN_NAME" | sudo tee -a /etc/hosts
-
-    - name: Install timeout
-      run: sudo apt-get install -y timelimit
 
     - name: make up
       working-directory: ./services
