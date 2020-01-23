@@ -14,7 +14,7 @@ dev:
 
 up:
 	@${DEV} up --detach --build
-
+# todo show logs
 proxy:
 	@${PROXY} up --detach
 	${PROXY} logs
@@ -30,6 +30,17 @@ deploy-rm:
 
 proxy-rm:
 	-@${PROXY} down -v
+
+target			=develop
+test:
+	docker run --rm -it --volume=/$${PWD}:/apps --network=host\
+		alpine \
+		bin/sh -c\
+		'cd /apps && \
+		apk update && \
+		apk add curl sudo bash && \
+		chmod +x /apps/test.sh && \
+		/apps/test.sh $(target)'
 
 .PHONY: help
 help:
