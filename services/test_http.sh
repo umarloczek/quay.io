@@ -2,6 +2,8 @@
 set -eu
 source .env
 
+declare -r STATIC_PATH="/wp-includes/js/jquery/jquery.js"
+
 wait-for-url() {
     echo "Testing $1"
     timeout -s TERM 45 bash -c \
@@ -11,8 +13,6 @@ wait-for-url() {
     echo "OK!"
     curl -I $1
 }
-
-declare -r STATIC_PATH="/wp-includes/js/jquery/jquery.js"
 
 if [[ $1 == "develop" ]];
 then
