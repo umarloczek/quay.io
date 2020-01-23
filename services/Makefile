@@ -14,10 +14,9 @@ dev:
 
 up:
 	@${DEV} up --detach --build
-# todo show logs
+
 proxy:
 	@${PROXY} up --detach
-	${PROXY} logs
 
 deploy: rm proxy
 	@${DEPLOY} up --detach --build
