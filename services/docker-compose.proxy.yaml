@@ -14,7 +14,7 @@ services:
 
   nginx-proxy:
     restart: always
-    image: jwilder/nginx-proxy:alpine
+    image: quay.io/bukow/nginx-proxy
 #    labels:
 #      - com.github.jrcs.letsencrypt_nginx_proxy_companion.nginx_proxy=
     ports:
