@@ -9,32 +9,36 @@ jobs:
     steps:
     - uses: actions/checkout@v1
 
+    - name: W?
+      run: timeout
+
+    - name: Load environment
+      run: source .env
+      working-directory: ./services
+
+    - name: Modify /etc/hosts
+      run: echo "127.0.0.1 $DOMAIN_NAME" | sudo tee -a /etc/hosts
+
     - name: Install timeout
       run: sudo apt-get install -y timelimit
 
-    - name: Develop
+    - name: make up
       working-directory: ./services
       run: make up
 
     - name: Wait for homepage 200 OK
       working-directory: ./services
-      run: source .env && \
-          timeout -s TERM 60 bash -c 'while [[ "$$(curl -s -o /dev/null -L -w ''%{http_code}'' \
-            localhost:${WORDPRESS_PORT})" != "200" ]]; \
-            do echo Waiting... && sleep 5; done'
+      run: timeout -s TERM 60 bash -c 'while [[ "$$(curl -s -o /dev/null -L -w ''%{http_code}''
+           localhost:${WORDPRESS_PORT})" != "200" ]];
+           do echo Waiting... && sleep 5; done'
 
     - name: Wait for static 200 OK
       working-directory: ./services
-      run: source .env && \
-          timeout -s TERM 60 bash -c 'while [[ "$$(curl -s -o /dev/null -L -w ''%{http_code}'' \
-            localhost:${WORDPRESS_PORT})/wp-includes/js/jquery/jquery.js" != "200" ]]; \
-            do echo Waiting... && sleep 5; done'
+      run: timeout -s TERM 60 bash -c 'while [[ "$$(curl -s -o /dev/null -L -w ''%{http_code}''
+           localhost:${WORDPRESS_PORT})/wp-includes/js/jquery/jquery.js" != "200" ]];
+           do echo Waiting... && sleep 5; done'
 
-    - name: Write hosts file
-      working-directory: ./services
-      run: source .env && echo "127.0.0.1 $DOMAIN_NAME" | sudo tee -a /etc/hosts
-
-    - name: Deploy
+    - name: make deploy
       working-directory: ./services
       run: make deploy
 
