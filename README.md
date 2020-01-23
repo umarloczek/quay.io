@@ -1,10 +1,5 @@
-#### nginx
-[![Docker Repository on Quay](https://quay.io/repository/bukowwp/nginx/status "Docker Repository on Quay")](https://quay.io/repository/bukowwp/nginx)
-#### wordpress
-[![Docker Repository on Quay](https://quay.io/repository/bukowwp/wordpress/status "Docker Repository on Quay")](https://quay.io/repository/bukowwp/wordpress)
-#### mysql
-[![Docker Repository on Quay](https://quay.io/repository/bukowwp/mysql/status "Docker Repository on Quay")](https://quay.io/repository/bukowwp/mysql)
+#### wordpress stack
 
-
+[![Build Status](https://travis-ci.org/bukwp/quay.io.svg?branch=master)](https://travis-ci.org/bukwp/quay.io)
 # todo
 * `localhost:9333/asdASDa/435/345/345/345` >> `homepage` why?
