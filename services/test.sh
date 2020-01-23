@@ -2,6 +2,14 @@
 set -eux
 source .env
 
+function develop (){
+    make up && ./test_http.sh develop
+}
+
+function deploy (){
+    make deploy && ./test_http.sh deploy
+}
+
 export WORDPRESS_PORT=3456
 develop
 deploy
@@ -11,10 +19,6 @@ develop
 make rm
 deploy
 
-function develop (){
-    make up && ./test_http.sh develop
-}
-
-function deploy (){
-    make deploy && ./test_http.sh deploy
-}
+export WORDPRESS_PORT=3457
+develop
+deploy
