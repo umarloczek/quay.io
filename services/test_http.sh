@@ -24,7 +24,6 @@ if [[ $1 == "deploy" ]];
 then
     declare -p DOMAIN_NAME
     echo "127.0.0.1 ${DOMAIN_NAME}" | sudo tee -a /etc/hosts
-    cat /etc/hosts
     declare -r HOST="${DOMAIN_NAME}"
 fi
 
