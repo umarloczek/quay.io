@@ -9,59 +9,12 @@ jobs:
     steps:
     - uses: actions/checkout@v1
 
-    - name: cd services
-      run: cd ./services
-
-    - name: set $WORDPRESS_PORT
-      env:
-        WORDPRESS_PORT: 3000
-#      working-directory: ./services
-      run: echo WORDPRESS_PORT=${WORDPRESS_PORT} >> .env
-
-    - name: make up
-      run: make up
-#      working-directory: ./services
-
-    - name: test develop
-      run: make test target=develop
-#      working-directory: ./services
-
-    - name: make deploy
-      run: make deploy
+    - name: test
+      run: ./test.sh
       working-directory: ./services
 
-    - name: test deploy
-      run: make test target=deploy
-      working-directory: ./services
+    - name: docker ps
+      run: docker ps
 
-    - name: change $WORDPRESS_PORT
-      env:
-        WORDPRESS_PORT: 3333
-      run: echo WORDPRESS_PORT=${WORDPRESS_PORT} >> .env
-      working-directory: ./services
-
-    - name: make up
-      run: make up
-      working-directory: ./services
-
-    - name: test develop
-      run: make test target=develop
-      working-directory: ./services
-
-    - name: make rm
-      run: make rm
-      working-directory: ./services
-
-    - name: make deploy
-      run: make deploy
-      working-directory: ./services
-
-    - name: test deploy
-      run: make test target=deploy
-      working-directory: ./services
-
-    - name: Stats
-      run: |
-        docker stats --no-stream
-        docker ps
-      working-directory: ./services
+    - name: docker stats
+      run: docker stats --no-stream
