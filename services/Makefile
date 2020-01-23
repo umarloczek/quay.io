@@ -51,3 +51,9 @@ proxy-config:
 
 proxy-exec:
 	docker exec services_nginx-proxy_1 cat /etc/nginx/conf.d/default.conf
+
+nginx-perms:
+	${DEPLOY} run --entrypoint="" nginx ls -al /var/www/html
+
+wordpress-perms:
+	${DEPLOY} run --entrypoint="" nginx ls -al /var/www/html

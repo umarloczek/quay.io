@@ -35,7 +35,9 @@ jobs:
         docker ps
         docker stats --no-stream
         docker network ls
-
+        make nginx-perms
+        make wordpress-perms
+        
       working-directory: ./services
 
     - name: docker ps
@@ -50,4 +52,6 @@ jobs:
         make proxy-config
         make proxy-exec
         docker network ls
+        make nginx-perms
+        make wordpress-perms
       working-directory: ./services
