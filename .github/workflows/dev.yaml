@@ -31,13 +31,12 @@ jobs:
         make log-dev
         make log-deploy
         make proxy-config
-        make proxy-exec
         docker ps
         docker stats --no-stream
         docker network ls
         make nginx-perms
         make wordpress-perms
-        
+
       working-directory: ./services
 
     - name: docker ps
@@ -50,7 +49,6 @@ jobs:
       run: |
         make log-deploy
         make proxy-config
-        make proxy-exec
         docker network ls
         make nginx-perms
         make wordpress-perms

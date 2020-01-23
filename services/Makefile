@@ -49,9 +49,6 @@ log-deploy:
 proxy-config:
 	${DEPLOY} run --entrypoint="" nginx-proxy cat /etc/nginx/conf.d/default.conf
 
-proxy-exec:
-	docker exec services_nginx-proxy_1 cat /etc/nginx/conf.d/default.conf
-
 nginx-perms:
 	${DEPLOY} run --entrypoint="" nginx ls -al /var/www/html
 
