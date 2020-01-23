@@ -3,27 +3,64 @@ name: Dev
 on: [push, pull_request]
 
 jobs:
-  bench:
+
+  develop:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v1
 
-    - name: dev-up
-      run: make dev-up
+    - name: Develop
+      working-directory: ./services
+      run: make up
 
-    - name: dev-down
-      run: make dev-down
+    - name: Wait for homepage 200 OK
+      working-directory: ./services
+      run: |
+        source .env
+        timeout -s TERM 60 sh -c 'while [[ "$$(curl -s -o /dev/null -L -w ''%{http_code}'' \
+          localhost:${WORDPRESS_PORT})" != "200" ]]; \
+          do echo Waiting... && sleep 5; done'
 
-    - name: dev-rm
-      run: make dev-rm
+    - name: Wait for static 200 OK
+      working-directory: ./services
+      run: |
+        source .env
+        timeout -s TERM 60 sh -c 'while [[ "$$(curl -s -o /dev/null -L -w ''%{http_code}'' \
+          localhost:${WORDPRESS_PORT})/wp-includes/js/jquery/jquery.js" != "200" ]]; \
+          do echo Waiting... && sleep 5; done'
 
-    - name: dev-restart
-      run: make dev-restart
+    - name: Write hosts file
+      working-directory: ./services
+      run: |
+        source .env
+        sudo echo "127.0.0.1 $DOMAIN_NAME" >> /etc/hosts
 
-    - name: bench
-      run: make bench
+    - name: Deploy
+      working-directory: ./services
+      run: make deploy
 
-    - name: stats
-      run: docker stats --no-stream
+    - name: Wait for homepage 200 OK
+      working-directory: ./services
+      run: |
+        source .env
+        timeout -s TERM 60 sh -c 'while [[ "$$(curl -s -o /dev/null -L -w ''%{http_code}'' \
+          ${DOMAIN_NAME})" != "200" ]]; \
+          do echo Waiting... && sleep 5; done'
 
-# todo test deploy with workflow
+    - name: Wait for static 200 OK
+      working-directory: ./services
+      run: |
+        source .env
+        timeout -s TERM 60 sh -c 'while [[ "$$(curl -s -o /dev/null -L -w ''%{http_code}'' \
+          ${DOMAIN_NAME})/wp-includes/js/jquery/jquery.js" != "200" ]]; \
+          do echo Waiting... && sleep 5; done'
+
+    - name: Cleanup
+      working-directory: ./services
+      run: make clear
+
+    - name: Stats
+      working-directory: ./services
+      run: |
+        docker stats --no-stream
+        docker ps

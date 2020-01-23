@@ -8,4 +8,3 @@
 
 # todo
 * `localhost:9333/asdASDa/435/345/345/345` >> `homepage` why?
-* disable WORDPRESS DEBUG in production

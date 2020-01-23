@@ -1,0 +1,28 @@
+version: '3.6'
+
+volumes:
+  www:
+
+services:
+
+  nginx:
+    environment:
+      VIRTUAL_HOST: ${DOMAIN_NAME}
+      LETSENCRYPT_HOST: ${DOMAIN_NAME}
+
+  wp-cli:
+    command: "deploy"
+    depends_on:
+      - wordpress
+    build:
+      context: wp-cli
+    environment:
+      WORDPRESS_HOST: "wordpress:9000"
+      WORDPRESS_TITLE:
+      WORDPRESS_LOGIN:
+      WORDPRESS_PASSWORD:
+      WORDPRESS_PORT:
+      WORDPRESS_EMAIL:
+      DOMAIN_NAME:
+    volumes:
+      - "./var/www/html:/var/www/html"
