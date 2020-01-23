@@ -9,8 +9,13 @@ jobs:
     steps:
     - uses: actions/checkout@v1
 
+    - name: permissions
+      run: |
+        chmod +x ./test.sh
+        chmod +x ./test_http.sh
+
     - name: test
-      run: chmod +x ./test.sh && ./test.sh
+      run: ./test.sh
       working-directory: ./services
 
     - name: docker ps
