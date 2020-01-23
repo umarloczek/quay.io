@@ -5,6 +5,14 @@ volumes:
 
 services:
 
+  nginx-proxy:
+    restart: always
+    image: quay.io/bukow/nginx-proxy
+    ports:
+      - 80:80
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+
   nginx:
     environment:
       VIRTUAL_HOST: ${DOMAIN_NAME}

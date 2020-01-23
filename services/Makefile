@@ -2,33 +2,26 @@ include .env
 # todo add commands for deploying proxy and logs, automate this process
 DEV				=docker-compose -f docker-compose.yaml -f docker-compose.override.yaml
 DEPLOY			=docker-compose -f docker-compose.yaml -f docker-compose.deploy.yaml
-PROXY			=docker-compose -f docker-compose.proxy.yaml
 
 WAITCMD			=timeout -s TERM 120 sh -c 'while [[ "$$(curl -s -o /dev/null -L -w ''%{http_code}'' ${URL})" != "200" ]]; do echo ${URL} not ready && sleep 2; done'
 
-clear: rm proxy-rm deploy-rm
+clear: rm deploy-rm
 
-dev:
-	${DEV} up --detach --build
+dev: up
 	${DEV} logs -f
 
 up:
 	${DEV} up --detach --build
 
-proxy:
-	${PROXY} up --detach
-
-deploy: rm proxy
-	${DEPLOY} up --detach --build
-
 rm:
 	-${DEV} down -v
+
+deploy: rm
+	${DEPLOY} up --detach --build
 
 deploy-rm:
 	-${DEPLOY} down -v
 
-proxy-rm:
-	-${PROXY} down -v
 
 target			=develop
 .PHONY: test
@@ -53,11 +46,8 @@ log-dev:
 log-deploy:
 	${DEPLOY} logs
 
-log-proxy:
-	${PROXY} logs
-
 proxy-config:
-	${PROXY} run --entrypoint="" nginx-proxy cat /etc/nginx/conf.d/default.conf
+	${DEPLOY} run --entrypoint="" nginx-proxy cat /etc/nginx/conf.d/default.conf
 
 proxy-exec:
 	docker exec services_nginx-proxy_1 cat /etc/nginx/conf.d/default.conf
