@@ -13,6 +13,7 @@ jobs:
       run: |
         chmod +x ./test.sh
         chmod +x ./test_http.sh
+      working-directory: ./services
 
     - name: test
       run: ./test.sh
