@@ -9,26 +9,26 @@ WAITCMD			=timeout -s TERM 120 sh -c 'while [[ "$$(curl -s -o /dev/null -L -w ''
 clear: rm proxy-rm deploy-rm
 
 dev:
-	@${DEV} up --detach --build
+	${DEV} up --detach --build
 	${DEV} logs -f
 
 up:
-	@${DEV} up --detach --build
+	${DEV} up --detach --build
 
 proxy:
-	@${PROXY} up --detach
+	${PROXY} up --detach
 
 deploy: rm proxy
-	@${DEPLOY} up --detach --build
+	${DEPLOY} up --detach --build
 
 rm:
-	-@${DEV} down -v
+	-${DEV} down -v
 
 deploy-rm:
-	-@${DEPLOY} down -v
+	-${DEPLOY} down -v
 
 proxy-rm:
-	-@${PROXY} down -v
+	-${PROXY} down -v
 
 target			=develop
 .PHONY: test
@@ -48,13 +48,16 @@ help:
 
 
 log-dev:
-	@${DEV} logs
+	${DEV} logs
 
 log-deploy:
-	@${DEPLOY} logs
+	${DEPLOY} logs
 
 log-proxy:
-	@${PROXY} logs
+	${PROXY} logs
 
 proxy-config:
-	@${PROXY} run nginx-proxy cat /etc/nginx/conf.d/default.conf
+	${PROXY} run --entrypoint="" nginx-proxy cat /etc/nginx/conf.d/default.conf
+
+proxy-exec:
+	docker exec services_nginx-proxy_1 cat /etc/nginx/conf.d/default.conf
