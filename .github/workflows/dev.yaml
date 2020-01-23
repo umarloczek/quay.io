@@ -9,51 +9,59 @@ jobs:
     steps:
     - uses: actions/checkout@v1
 
-    - name: Load environment
-      run: source .env
-      working-directory: ./services
+    - name: cd services
+      run: cd ./services
 
-    - name: Modify /etc/hosts
-      run: echo "127.0.0.1 $DOMAIN_NAME" | sudo tee -a /etc/hosts
+    - name: set $WORDPRESS_PORT
+      env:
+        WORDPRESS_PORT: 3000
+#      working-directory: ./services
+      run: echo WORDPRESS_PORT=${WORDPRESS_PORT} >> .env
 
     - name: make up
-      working-directory: ./services
       run: make up
+#      working-directory: ./services
 
-    - name: Wait for homepage 200 OK
-      working-directory: ./services
-      run: source .env && timeout -s TERM 60 bash -c 'while [[ "$$(curl -s -o /dev/null -L -w ''%{http_code}''
-           localhost:${WORDPRESS_PORT})" != "200" ]];
-           do echo Waiting... && sleep 5; done'
-
-    - name: Wait for static 200 OK
-      working-directory: ./services
-      run: source .env && timeout -s TERM 60 bash -c 'while [[ "$$(curl -s -o /dev/null -L -w ''%{http_code}''
-           localhost:${WORDPRESS_PORT})/wp-includes/js/jquery/jquery.js" != "200" ]];
-           do echo Waiting... && sleep 5; done'
+    - name: test develop
+      run: make test target=develop
+#      working-directory: ./services
 
     - name: make deploy
-      working-directory: ./services
       run: make deploy
-
-    - name: Wait for homepage 200 OK
       working-directory: ./services
-      run: source .env && timeout -s TERM 60 bash -c 'while [[ "$$(curl -s -o /dev/null -L -w ''%{http_code}''
-           ${DOMAIN_NAME})" != "200" ]];
-           do echo Waiting... && sleep 5; done'
 
-    - name: Wait for static 200 OK
+    - name: test deploy
+      run: make test target=deploy
       working-directory: ./services
-      run: source .env && timeout -s TERM 60 bash -c 'while [[ "$$(curl -s -o /dev/null -L -w ''%{http_code}''
-           ${DOMAIN_NAME})/wp-includes/js/jquery/jquery.js" != "200" ]];
-           do echo Waiting... && sleep 5; done'
 
-    - name: Cleanup
+    - name: change $WORDPRESS_PORT
+      env:
+        WORDPRESS_PORT: 3333
+      run: echo WORDPRESS_PORT=${WORDPRESS_PORT} >> .env
       working-directory: ./services
-      run: make clear
+
+    - name: make up
+      run: make up
+      working-directory: ./services
+
+    - name: test develop
+      run: make test target=develop
+      working-directory: ./services
+
+    - name: make rm
+      run: make rm
+      working-directory: ./services
+
+    - name: make deploy
+      run: make deploy
+      working-directory: ./services
+
+    - name: test deploy
+      run: make test target=deploy
+      working-directory: ./services
 
     - name: Stats
-      working-directory: ./services
       run: |
         docker stats --no-stream
         docker ps
+      working-directory: ./services
