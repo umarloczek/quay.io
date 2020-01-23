@@ -11,8 +11,8 @@ jobs:
 
     - name: add $DOMAIN_NAME to hosts
       run: |
-      source .env
-      echo "127.0.0.1 ${DOMAIN_NAME}" | sudo tee -a /etc/hosts
+        source .env
+        echo "127.0.0.1 ${DOMAIN_NAME}" | sudo tee -a /etc/hosts
 
     - name: permissions
       run: |
@@ -35,6 +35,7 @@ jobs:
         docker ps
         docker stats --no-stream
         docker network ls
+
       working-directory: ./services
 
     - name: docker ps
