@@ -36,9 +36,8 @@ resource "digitalocean_droplet" "mywebserver" {
   provisioner "remote-exec" {
     // #todo sleep before deployments to fix digitalocean networking issues?
     inline = [
-      "cd /apps",
-      "docker-compose -f docker-compose.proxy.yaml up -d",
-      "docker-compose -f docker-compose.deploy.yaml up -d",
+      "cd /apps/services",
+      "make deploy"
     ]
   }
 }
