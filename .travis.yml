@@ -4,7 +4,7 @@ services:
   - docker
 
 env:
-  - DOCKER_COMPOSE_VERSION=1.4.2
+  - DOCKER_COMPOSE_VERSION=1.24.1
 
 before_install:
   - sudo rm /usr/local/bin/docker-compose
@@ -22,3 +22,21 @@ before_script:
 
 script:
   - ./test.sh
+
+after_failure:
+  - cat /etc/hosts
+  - make log-dev
+  - make log-deploy
+  - make proxy-config
+  - docker ps
+  - docker stats --no-stream
+  - docker network ls
+  - make nginx-perms
+  - make wordpress-perms
+
+after_success:
+- make log-deploy
+- make proxy-config
+- docker network ls
+- make nginx-perms
+- make wordpress-perms
