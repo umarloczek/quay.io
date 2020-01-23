@@ -27,6 +27,8 @@ jobs:
         make log-deploy
         make log-proxy
         make proxy-config
+        docker ps
+        docker stats --no-stream
       working-directory: ./services
 
     - name: docker ps
