@@ -27,6 +27,7 @@ jobs:
         make log-deploy
         make log-proxy
         make proxy-config
+        make proxy-exec
         docker ps
         docker stats --no-stream
         docker network ls
