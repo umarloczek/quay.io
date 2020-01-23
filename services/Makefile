@@ -8,9 +8,12 @@ WAITCMD			=timeout -s TERM 120 sh -c 'while [[ "$$(curl -s -o /dev/null -L -w ''
 
 clear: rm proxy-rm deploy-rm
 
-up:
+dev:
 	@${DEV} up --detach --build
 	${DEV} logs -f
+
+up:
+	@${DEV} up --detach --build
 
 proxy:
 	@${PROXY} up --detach
