@@ -29,6 +29,7 @@ jobs:
         make proxy-config
         docker ps
         docker stats --no-stream
+        docker network ls
       working-directory: ./services
 
     - name: docker ps
