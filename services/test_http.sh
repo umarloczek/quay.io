@@ -1,0 +1,33 @@
+#!/bin/bash
+set -eu
+source .env
+
+wait-for-url() {
+    echo "Testing $1"
+    timeout -s TERM 180 bash -c \
+    'while [[ "$(curl -s -o /dev/null -L -w ''%{http_code}'' ${0})" != "200" ]];\
+    do echo "Waiting for ${0}" && sleep 2;\
+    done' ${1}
+    echo "OK!"
+    curl -I $1
+}
+
+declare -r STATIC_PATH="/wp-includes/js/jquery/jquery.js"
+
+if [[ $1 == "develop" ]];
+then
+    declare -p WORDPRESS_PORT
+    declare -r HOST="localhost:${WORDPRESS_PORT}"
+fi
+
+if [[ $1 == "deploy" ]];
+then
+    declare -p DOMAIN_NAME
+    echo "127.0.0.1 $DOMAIN_NAME" | sudo tee -a /etc/hosts
+    declare -r HOST="${DOMAIN_NAME}"
+fi
+
+wait-for-url http://${HOST}
+wait-for-url http://${HOST}${STATIC_PATH}
+
+echo http://${HOST}
