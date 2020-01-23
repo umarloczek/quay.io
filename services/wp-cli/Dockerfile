@@ -10,10 +10,12 @@ RUN chown www-data:www-data \
     /usr/local/bin/wait-for-it
 
 WORKDIR /app
+
 COPY entrypoint.sh .
+RUN chmod+x /app/entrypoint.sh
 RUN chown www-data:www-data entrypoint.sh
 
 WORKDIR /var/www/html
-USER www-data
 
+USER www-data
 ENTRYPOINT ["/app/entrypoint.sh"]
