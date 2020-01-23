@@ -6,7 +6,7 @@ volumes:
 services:
 
   nginx-proxy:
-    restart: always
+    restart: unless-stopped
     image: quay.io/bukow/nginx-proxy
     ports:
       - 80:80
