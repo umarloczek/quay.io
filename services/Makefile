@@ -57,3 +57,5 @@ log-deploy:
 log-proxy:
 	@${PROXY} logs
 
+proxy-config:
+	@${PROXY} run nginx-proxy cat /etc/nginx/conf.d/default.conf

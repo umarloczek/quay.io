@@ -26,6 +26,7 @@ jobs:
         make log-dev
         make log-deploy
         make log-proxy
+        make proxy-config
       working-directory: ./services
 
     - name: docker ps
