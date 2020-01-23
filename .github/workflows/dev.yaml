@@ -21,8 +21,9 @@ jobs:
 
     - name: show logs
       if: failure()
-      run: make log-dev && make log-deploy && make log-proxy
-
+      run: make cat /etc/hosts/ && make log-dev && make log-deploy && make log-proxy
+      working-directory: ./services
+      
     - name: docker ps
       run: docker ps
 
