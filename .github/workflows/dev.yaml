@@ -9,6 +9,11 @@ jobs:
     steps:
     - uses: actions/checkout@v1
 
+    - name: add $DOMAIN_NAME to hosts
+      run: |
+      source .env
+      echo "127.0.0.1 ${DOMAIN_NAME}" | sudo tee -a /etc/hosts
+
     - name: permissions
       run: |
         chmod +x ./test.sh
@@ -37,3 +42,11 @@ jobs:
 
     - name: docker stats
       run: docker stats --no-stream
+
+    - name: show logs
+      run: |
+        make log-deploy
+        make proxy-config
+        make proxy-exec
+        docker network ls
+      working-directory: ./services
