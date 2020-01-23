@@ -12,7 +12,7 @@ RUN chown www-data:www-data \
 WORKDIR /app
 
 COPY entrypoint.sh .
-RUN chmod+x /app/entrypoint.sh
+RUN chmod +x /app/entrypoint.sh
 RUN chown www-data:www-data entrypoint.sh
 
 WORKDIR /var/www/html
