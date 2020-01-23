@@ -47,3 +47,13 @@ test:
 help:
 	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z0-9_-]+:.*?## / {printf "\033[36m%-16s\033[0m %s\n", $$1, $$2}' $(MAKEFILE_LIST)
 
+
+log-dev:
+	@${DEV} logs
+
+log-deploy:
+	@${DEPLOY} logs
+
+log-proxy:
+	@${PROXY} logs
+

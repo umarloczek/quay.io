@@ -19,6 +19,10 @@ jobs:
       run: ./test.sh
       working-directory: ./services
 
+    - name: show logs
+      if: failure()
+      run: make log-dev && make log-deploy && make log-proxy
+
     - name: docker ps
       run: docker ps
 
