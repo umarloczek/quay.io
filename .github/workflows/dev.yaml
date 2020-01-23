@@ -22,7 +22,7 @@ jobs:
     - name: show logs
       if: failure()
       run: |
-        cat /etc/hosts/
+        cat /etc/hosts
         make log-dev
         make log-deploy
         make log-proxy
