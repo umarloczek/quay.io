@@ -15,7 +15,6 @@ develop
 deploy
 
 develop
-make rm
 deploy
 
 develop
